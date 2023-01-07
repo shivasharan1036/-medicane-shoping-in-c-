@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+struct Medicine {
+  std::string name;
+  double price;
+};
+
+class MedicineShop {
+ public:
+  MedicineShop() {}
+
+  // Add a new medicine to the shop's inventory
+  void AddMedicine(const Medicine& medicine) {
+    inventory_.push_back(medicine);
+  }
+
+  // Print the shop's inventory
+  void PrintInventory() {
+    std::cout << "Medicine Shop Inventory:" << std::endl;
+    for (const Medicine& medicine : inventory_) {
+      std::cout << "  " << medicine.name << " - $" << medicine.price << std::endl;
+    }
+  }
+
+  // Place an order for a medicine
+  void PlaceOrder(const std::string& medicine_name) {
+    Medicine* medicine = FindMedicine(medicine_name);
+    if (medicine == nullptr) {
+      std::cout << "Sorry, we do not carry " << medicine_name << "." << std::endl;
+      return;
+    }
+
+    double cost = medicine->price;
+    std::cout << "Your order for " << medicine_name << " has been placed." << std::endl;
+    std::cout << "The total cost is $" << cost << "." << std::endl;
+  }
+
+ private:
+  // Find a medicine in the shop's inventory by name
+  Medicine* FindMedicine(const std::string& name) {
+    for (Medicine& medicine : inventory_) {
+      if (medicine.name == name) {
+        return &medicine;
+      }
+    }
+    return nullptr;
+  }
+
+  std::vector<Medicine> inventory_;
+};
+
+int main() {
+  MedicineShop shop;
+  shop.AddMedicine({"Aspirin", 9.99});
+  shop.AddMedicine({"Cold Medicine", 12.99});
+  shop.AddMedicine({"Pain Reliever", 14.99});
+
+  shop.PrintInventory();
+
+  shop.PlaceOrder("Aspirin");
+  shop.PlaceOrder("Cold Medicine");
+  shop.PlaceOrder("Allergy Medicine");
+
+  return 0;
+}
